@@ -1,0 +1,78 @@
+<?php
+/**
+* Category widget
+*
+* @var $block Emizentech\categorywidget\Block\Widget\Showcategories
+*/
+
+$title = $block->getTitle() ? __($block->getTitle()) : 'Categories';
+$level = $this->getData('level');
+$title_display = $block->getData('title_display');
+$category_title_display = $block->getData('category_title_display');
+$category_image_display = $block->getData('category_image_display');
+
+?>
+<?php
+	if ($title_display=='yes'): ?>
+<div class="block-title">
+    <strong role="heading" aria-level="2"><h3><?php /* @escapeNotVerified */
+            echo $title; ?></h3></strong>
+</div>
+<?php
+  endif;
+?>
+<?php $collection = $block->getCategoryCollection(); ?>
+<ul>
+    <?php
+    foreach ($collection as $category):
+        if (!$category->getIsActive()) {
+            continue;
+        }
+        ?>
+        <li>
+						<?php
+							if ($category_image_display=='yes'): ?>
+								<img src="<?php echo $category->getImageUrl(); ?>">
+						<?php
+							endif;
+						?>
+            <ul>
+								<?php
+									if ($category_image_display=='yes'): ?>
+										<li><a href="<?php echo $category->getUrl($category) ?>"><?php echo $category->getName() ?> GG</a></li>
+								<?php
+									endif;
+								?>
+                <?php
+
+                if ($childrenCategories = $category->getChildrenCategories()): ?>
+
+                <?php
+                foreach ($childrenCategories as $childrenCategory):
+                    if (!$childrenCategory->getIsActive()) {
+                        continue;
+                    }
+
+                    ?>
+                    <li>
+                        <a href="<?php echo $childrenCategory->getUrl($category); ?>"><?php echo $childrenCategory->getName() ?></a>
+                    </li>
+										<?php
+												if ($level>0)
+												{
+													$block->renderCategoriesTree($childrenCategory, $childrenCategory->getId(), $level, true);
+												}
+										?>
+								<?php
+								//
+                endforeach;
+                ?>
+            </ul>
+            <?php
+            endif;
+            ?>
+        </li>
+        <?php
+    endforeach;
+    ?>
+</ul>
