@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
 	<widget id="emizentech_categorywidget" class="Emizentech\CategoryWidget\Block\Widget\CategoryWidget">
-		<label translate="true">Category List Widget</label>
+		<label translate="true">Category List Widget horizontal</label>
 		<description>Store Default 1st level Category List Widget</description>
 		<parameters>
 			<parameter name="image" xsi:type="select" required="true" visible="true">
@@ -32,4 +32,52 @@
 			</parameter>
 		</parameters>
 	</widget>
+	<!-- chpock -->
+	<widget id="emizentech_Showcategories" class="Emizentech\CategoryWidget\Block\Widget\Showcategories">
+        <label translate="true">Category List Widget vertical</label>
+        <description>Show Category and Subcategory by ID</description>
+        <parameters>
+						<parameter name="title_display" xsi:type="select" required="false" visible="true" sort_order="1">
+                <label translate="true">Title</label>
+                <options>
+                    <option name="yes" value="yes" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="no" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="categoryids" xsi:type="text"  visible="true" sort_order="2" >
+                <label translate="true">Category Ids</label>
+								<description>(comma-separated list of Ids)</description>
+            </parameter>
+						<parameter name="category_title_display" xsi:type="select" required="false" visible="true" sort_order="3">
+                <label translate="true">Show Category Title</label>
+                <options>
+                    <option name="yes" value="yes" >
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="no" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+						<parameter name="category_image_display" xsi:type="select" required="false" visible="true" sort_order="4">
+                <label translate="true">Show Category image</label>
+                <options>
+                    <option name="yes" value="yes" >
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="no" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+						<parameter name="level" xsi:type="select" source_model="Emizentech\CategoryWidget\Model\Config\Source\Level" visible="true" sort_order="10" >
+								<label translate="true">Show Subcategory Level</label>
+						</parameter>
+
+        </parameters>
+    </widget>
 </widgets>
