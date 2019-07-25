@@ -5,7 +5,8 @@ use Magento\Widget\Block\BlockInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
 
 class Showcategories extends \Magento\Framework\View\Element\Template implements BlockInterface
 {
@@ -14,19 +15,16 @@ class Showcategories extends \Magento\Framework\View\Element\Template implements
     protected $categoryRepository;
     protected $_categoryCollectionFactory;
     protected $_storeManager;
+		protected $_registry;
+		protected $_logger;
 
-		/**
-     * @var Magento\Catalog\Model\CategoryFactory
-     */
-    protected $_categoryFactory;
-
-
-    public function __construct(Context $context, StoreManagerInterface $storeManager, CollectionFactory $categoryCollectionFactory, CategoryFactory $categoryFactory)
+    public function __construct(Context $context, StoreManagerInterface $storeManager, CollectionFactory $categoryCollectionFactory, Registry $registry, LoggerInterface $logger)
     {
 
         $this->_storeManager = $storeManager;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
-				$this->_categoryFactory = $categoryFactory;
+				$this->_registry = $registry;
+				$this->_logger = $logger;
         parent::__construct($context);
     }
 
@@ -47,7 +45,18 @@ class Showcategories extends \Magento\Framework\View\Element\Template implements
      */
     public function getCategoryIds()
     {
-        if ($this->hasData('categoryids')) {
+				if ($this->getData('useCurrentCategory') == 'yes')
+				{
+					$getCategory = $this->getCurrentCategory();
+					if($getCategory)
+					{
+							return $getCategory->getId();
+					} else {
+							  $this->_logger->error('Category List Widget vertical: Current page is not a category page');
+					}
+				}
+        if ($this->hasData('categoryids'))
+				{
             return $this->getData('categoryids');
         }
         return $this->getData('categoryids');
@@ -105,19 +114,31 @@ class Showcategories extends \Magento\Framework\View\Element\Template implements
         // If this is the first invocation, we just want to iterate through the top level categories, otherwise fetch the children
         $children = $isFirst ? $categories : $category->getChildrenCategories();
 
-        echo '<ul>';
-        // For each category, fetch its children recursively
-        foreach ($children as $child) {
-								if (!$child->getIsActive()) {
-									continue;
-								}
+				if (count($children)>0)
+				{
+					echo '<ul>';
+					// For each category, fetch its children recursively
+					foreach ($children as $child) {
+									if (!$child->getIsActive()) {
+										continue;
+									}
 
-								echo '<li><a href="'.$child->getUrl($child).'">'.$child->getName().'</a></li>';
-								if ($child->getChildren() && $level>1) {
-									$level--;
-									$this->renderCategoriesTree($child,$child->getId(),$level);
-								}
-        }
-        echo '</ul>';
+									echo '<li><a href="'.$child->getUrl($child).'">'.$child->getName().'</a></li>';
+									if ($child->getChildren() && $level>1) {
+										$level--;
+										$this->renderCategoriesTree($child,$child->getId(),$level);
+									}
+					}
+					echo '</ul>';
+				}
 		}
+
+		/* $categoryId as category id */
+    public function getCurrentCategory(){
+        try {
+            return $this->_registry->registry('current_category');
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+						$this->_logger->error('Category List Widget vertical: Category Not Found');
+        }
+    }
 }

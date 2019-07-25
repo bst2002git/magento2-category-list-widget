@@ -40,7 +40,7 @@
 						<parameter name="title_display" xsi:type="select" required="false" visible="true" sort_order="1">
                 <label translate="true">Title</label>
                 <options>
-                    <option name="yes" value="yes" selected="true">
+                    <option name="yes" value="yes">
                         <label translate="true">Yes</label>
                     </option>
                     <option name="no" value="no" selected="true">
@@ -48,12 +48,29 @@
                     </option>
                 </options>
             </parameter>
-            <parameter name="categoryids" xsi:type="text"  visible="true" sort_order="2" >
+						<parameter name="title" xsi:type="text" required="false" visible="true">
+             <label translate="true">Title</label>
+						</parameter>
+            <parameter name="categoryids" xsi:type="text"  visible="true" sort_order="5" >
                 <label translate="true">Category Ids</label>
 								<description>(comma-separated list of Ids)</description>
+								<depends>
+                    <parameter name="useCurrentCategory" value="no" />
+                </depends>
             </parameter>
-						<parameter name="category_title_display" xsi:type="select" required="false" visible="true" sort_order="3">
-                <label translate="true">Show Category Title</label>
+						<parameter name="useCurrentCategory" xsi:type="select" required="false" visible="true" sort_order="10">
+                <label translate="true">Use current Category ID</label>
+                <options>
+                    <option name="yes" value="yes">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="no" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+						<parameter name="category_title_display" xsi:type="select" required="false" visible="true" sort_order="20">
+                <label translate="true">Show current Category Title</label>
                 <options>
                     <option name="yes" value="yes" >
                         <label translate="true">Yes</label>
@@ -63,8 +80,8 @@
                     </option>
                 </options>
             </parameter>
-						<parameter name="category_image_display" xsi:type="select" required="false" visible="true" sort_order="4">
-                <label translate="true">Show Category image</label>
+						<parameter name="category_image_display" xsi:type="select" required="false" visible="true" sort_order="30">
+                <label translate="true">Show current Category image</label>
                 <options>
                     <option name="yes" value="yes" >
                         <label translate="true">Yes</label>
@@ -74,7 +91,7 @@
                     </option>
                 </options>
             </parameter>
-						<parameter name="level" xsi:type="select" source_model="Emizentech\CategoryWidget\Model\Config\Source\Level" visible="true" sort_order="10" >
+						<parameter name="level" xsi:type="select" source_model="Emizentech\CategoryWidget\Model\Config\Source\Level" visible="true" sort_order="40" >
 								<label translate="true">Show Subcategory Level</label>
 						</parameter>
 

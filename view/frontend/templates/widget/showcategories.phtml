@@ -22,24 +22,26 @@ $category_image_display = $block->getData('category_image_display');
   endif;
 ?>
 <?php $collection = $block->getCategoryCollection(); ?>
-<ul>
+<nav class="navigation" role="navigation">
+<div class="block subnav">
+	<div class="content">
     <?php
     foreach ($collection as $category):
         if (!$category->getIsActive()) {
             continue;
         }
         ?>
-        <li>
+        <ul >
 						<?php
 							if ($category_image_display=='yes'): ?>
 								<img src="<?php echo $category->getImageUrl(); ?>">
 						<?php
 							endif;
 						?>
-            <ul>
+            <ul >
 								<?php
-									if ($category_image_display=='yes'): ?>
-										<li><a href="<?php echo $category->getUrl($category) ?>"><?php echo $category->getName() ?> GG</a></li>
+									if ($category_title_display=='yes'): ?>
+										<li ><a href="<?php echo $category->getUrl($category) ?>"><?php echo $category->getName() ?></a></li>
 								<?php
 									endif;
 								?>
@@ -54,7 +56,7 @@ $category_image_display = $block->getData('category_image_display');
                     }
 
                     ?>
-                    <li>
+                    <li >
                         <a href="<?php echo $childrenCategory->getUrl($category); ?>"><?php echo $childrenCategory->getName() ?></a>
                     </li>
 										<?php
@@ -71,8 +73,10 @@ $category_image_display = $block->getData('category_image_display');
             <?php
             endif;
             ?>
-        </li>
+        </ul>
         <?php
     endforeach;
     ?>
-</ul>
+	</div>
+</div>
+</nav>
