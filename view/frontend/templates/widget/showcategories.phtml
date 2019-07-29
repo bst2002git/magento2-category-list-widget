@@ -2,6 +2,9 @@
 /**
 * Category widget
 *
+* .category-description.fng.haut .content.catalog-category.category-list ul
+* .content.catalog-category.category-list li.level-item0
+*
 * @var $block Emizentech\categorywidget\Block\Widget\Showcategories
 */
 
@@ -12,6 +15,7 @@ $category_title_display = $block->getData('category_title_display');
 $category_image_display = $block->getData('category_image_display');
 
 ?>
+<div class="widget showcategories">
 <?php
 	if ($title_display=='yes'): ?>
 <div class="block-title">
@@ -24,24 +28,24 @@ $category_image_display = $block->getData('category_image_display');
 <?php $collection = $block->getCategoryCollection(); ?>
 <nav class="navigation" role="navigation">
 <div class="block subnav">
-	<div class="content">
+	<div class="content catalog-category category-list">
     <?php
     foreach ($collection as $category):
         if (!$category->getIsActive()) {
             continue;
         }
         ?>
-        <ul >
+        <ul>
 						<?php
 							if ($category_image_display=='yes'): ?>
 								<img src="<?php echo $category->getImageUrl(); ?>">
 						<?php
 							endif;
 						?>
-            <ul >
+            <li>
 								<?php
 									if ($category_title_display=='yes'): ?>
-										<li ><a href="<?php echo $category->getUrl($category) ?>"><?php echo $category->getName() ?></a></li>
+										<li class="level-top0 cat-level<?php echo $category->getLevel() ?>"><a class="level-top0" href="<?php echo $category->getUrl($category) ?>"><?php echo $category->getName() ?></a></li>
 								<?php
 									endif;
 								?>
@@ -56,8 +60,8 @@ $category_image_display = $block->getData('category_image_display');
                     }
 
                     ?>
-                    <li >
-                        <a href="<?php echo $childrenCategory->getUrl($category); ?>"><?php echo $childrenCategory->getName() ?></a>
+                    <li class="level-item0 cat-level<?php echo $childrenCategory->getLevel() ?>">
+                        <a class="level-item0" href="<?php echo $childrenCategory->getUrl($category); ?>"><?php echo $childrenCategory->getName() ?></a>
                     </li>
 										<?php
 												if ($level>0)
@@ -69,7 +73,7 @@ $category_image_display = $block->getData('category_image_display');
 								//
                 endforeach;
                 ?>
-            </ul>
+            </li>
             <?php
             endif;
             ?>
@@ -80,3 +84,4 @@ $category_image_display = $block->getData('category_image_display');
 	</div>
 </div>
 </nav>
+</div>

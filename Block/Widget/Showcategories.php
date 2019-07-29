@@ -18,6 +18,8 @@ class Showcategories extends \Magento\Framework\View\Element\Template implements
 		protected $_registry;
 		protected $_logger;
 
+		protected $levelcount=1;
+
     public function __construct(Context $context, StoreManagerInterface $storeManager, CollectionFactory $categoryCollectionFactory, Registry $registry, LoggerInterface $logger)
     {
 
@@ -110,7 +112,15 @@ class Showcategories extends \Magento\Framework\View\Element\Template implements
 				$categoryRepository = $objectManager->create('Magento\Catalog\Model\CategoryRepository');
 				$parentcategories = $categoryRepository->get($parentCatId);
 				$categories = $parentcategories->getChildrenCategories();
+				/*
+				$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 
+				$categoryFactory = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+				$categories = $categoryFactory->create();
+				$categories->addAttributeToSelect('*');
+				$categories->addAttributeToFilter('level' , 2);
+				$secondlevelcategory = $categories->getColumnValues('entity_id');
+				*/
         // If this is the first invocation, we just want to iterate through the top level categories, otherwise fetch the children
         $children = $isFirst ? $categories : $category->getChildrenCategories();
 
@@ -118,16 +128,19 @@ class Showcategories extends \Magento\Framework\View\Element\Template implements
 				{
 					echo '<ul>';
 					// For each category, fetch its children recursively
+
 					foreach ($children as $child) {
 									if (!$child->getIsActive()) {
 										continue;
 									}
 
-									echo '<li><a href="'.$child->getUrl($child).'">'.$child->getName().'</a></li>';
-									if ($child->getChildren() && $level>1) {
+									echo '<li class="level-item'.$this->levelcount.' submenu cat-level'.$child->getLevel().'"><a href="'.$child->getUrl($child).'">'.$child->getName().'</a></li>';
+									if ($child->getChildren() && $level>1) { $this->levelcount++;
 										$level--;
 										$this->renderCategoriesTree($child,$child->getId(),$level);
+										$this->levelcount--;
 									}
+
 					}
 					echo '</ul>';
 				}
