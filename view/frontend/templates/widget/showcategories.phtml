@@ -37,7 +37,7 @@ $category_image_display = $block->getData('category_image_display');
         ?>
         <ul>
 						<?php
-							if ($category_image_display=='yes'): ?>
+							if ($category_image_display=='yes' && !empty($category->getImageUrl())): ?>
 								<img src="<?php echo $category->getImageUrl(); ?>">
 						<?php
 							endif;
